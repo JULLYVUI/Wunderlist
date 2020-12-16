@@ -16,13 +16,17 @@ class ListModel extends DB{
    /**
     * Show List by User
     */
+   //  SELECT l.name,l.created_at,l.id,t.status, COUNT(t.status) AS number_of_tasks 
+   //  FROM list l 
+   //  LEFT JOIN task t ON l.id=t.list_id AND t.status='active'
+   //  WHERE l.user_id= 20 
+   //  GROUP BY l.id
 
-   // AND t.status='active'
    public function showUserLists(){
 
       $query="SELECT l.name,l.created_at,l.id, COUNT(t.id) AS number_of_tasks 
               FROM list l 
-              LEFT JOIN task t ON l.id=t.list_id
+              LEFT JOIN task t ON l.id=t.list_id AND t.status='active'
               WHERE l.user_id= :user_id 
               GROUP BY l.id";
       $stmt=static::getDB()->prepare($query);
@@ -30,6 +34,7 @@ class ListModel extends DB{
       return $stmt->fetchAll();
       
    }
+   
    /**
     * Create New List
     */
